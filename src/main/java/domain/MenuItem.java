@@ -1,3 +1,5 @@
+package domain;
+
 import java.util.Objects;
 
 public class MenuItem {
@@ -25,7 +27,7 @@ public class MenuItem {
 
     @Override
     public String toString() {
-        return "MenuItem{" +
+        return "domain.MenuItem{" +
                 "name='" + name + '\'' +
                 ", price=" + price +
                 '}';

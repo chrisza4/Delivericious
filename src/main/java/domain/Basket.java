@@ -1,5 +1,6 @@
 package domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +33,11 @@ public class Basket {
 
     public Optional<BasketItem> getBasketItemById(UUID id) {
         return this.basketItems.stream().filter(basketItem -> basketItem.getId().equals(id)).findFirst();
+    }
+
+    public Money totalPrice() {
+        var startMoney = new Money(new BigDecimal(0), Currency.SGD);
+        return basketItems.stream().map(BasketItem::price).reduce(startMoney,
+                (current, price) -> current.add(price));
     }
 }

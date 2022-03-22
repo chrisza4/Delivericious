@@ -1,5 +1,6 @@
 package domain;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class BasketItem {
@@ -31,5 +32,9 @@ public class BasketItem {
 
     public void reduceQuantity(int by) {
         this.quantity -= by;
+    }
+
+    public Money price() {
+        return menuItem.getPrice().multiplyBy(new BigDecimal(this.quantity));
     }
 }

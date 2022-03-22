@@ -29,6 +29,12 @@ public class ScenarioTest {
     basket.remove(chocolateBasketItem.getId(), 1);
 
     Assertions.assertEquals(2, basket.getBasketItemById(chocolateBasketItem.getId()).get().getQuantity());
+
+    // 2 Icecream, 1 Tomato soup, 1 Seafood salad
+    // 8$ + 10$ + 12$ = 30$
+
+    var totalPrice = basket.totalPrice();
+    Assertions.assertEquals(new Money(new BigDecimal("30.00"), Currency.SGD), totalPrice);
   }
 
 }

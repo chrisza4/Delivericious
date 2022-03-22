@@ -1,12 +1,24 @@
 package domain;
 
+import java.util.UUID;
+
 public class BasketItem {
+    private final UUID id;
     private final MenuItem menuItem;
-    private final int      quantity;
+    private int quantity;
 
     public BasketItem(MenuItem menuItem, int quantity) {
+        this(UUID.randomUUID(), menuItem, quantity);
+    }
+
+    public BasketItem(UUID id, MenuItem menuItem, int quantity) {
+        this.id = id;
         this.menuItem = menuItem;
         this.quantity = quantity;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public MenuItem getMenuItem() {
@@ -15,5 +27,9 @@ public class BasketItem {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void reduceQuantity(int by) {
+        this.quantity -= by;
     }
 }

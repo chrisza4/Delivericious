@@ -9,7 +9,7 @@ import java.util.List;
 public class BasketTest {
 
     @Test
-    void shouldAddMenuItemsToBasket() {
+    void shouldAddMenuItemsToBasket() throws BasketAmountExceedException {
         MenuItem tomatoSoup = new MenuItem("Tomato Soup", new Money(new BigDecimal("10.00"), Currency.SGD));
         MenuItem seaFoodSalad = new MenuItem("Sea food salad", new Money(new BigDecimal("12.00"), Currency.SGD));
         MenuItem chocolateIceCream = new MenuItem("Chocolate Ice Cream",
@@ -33,7 +33,7 @@ public class BasketTest {
     }
 
     @Test
-    void shouldRemoveBasketItemIfQuantityIsZero() {
+    void shouldRemoveBasketItemIfQuantityIsZero() throws BasketAmountExceedException {
         MenuItem tomatoSoup = new MenuItem("Tomato Soup", new Money(new BigDecimal("10.00"), Currency.SGD));
         BasketItem tomatoBasketItem = new BasketItem(tomatoSoup, 1);
         Basket basket = new Basket();

@@ -8,8 +8,12 @@ import java.util.UUID;
 
 public class Basket {
     private List<BasketItem> basketItems = new ArrayList<>();
+    private static final Money AMOUNT_LIMIT = new Money(new BigDecimal(10000), Currency.SGD);
 
-    public void add(BasketItem basketItem) {
+    public void add(BasketItem basketItem) throws BasketAmountExceedException {
+        if (totalPrice().add(basketItem.price()).moreThan(AMOUNT_LIMIT)) {
+            throw new BasketAmountExceedException();
+        }
         basketItems.add(basketItem);
     }
 

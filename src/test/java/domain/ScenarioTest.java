@@ -9,7 +9,7 @@ import java.util.List;
 public class ScenarioTest {
 
   @Test
-  void OurUseCases() {
+  void OurUseCases() throws BasketAmountExceedException {
     MenuItem tomatoSoup = new MenuItem("Tomato Soup", new Money(new BigDecimal("10.00"), Currency.SGD));
     MenuItem seaFoodSalad = new MenuItem("Sea food salad", new Money(new BigDecimal("12.00"), Currency.SGD));
     MenuItem chocolateIceCream = new MenuItem("Chocolate Ice Cream",
@@ -35,6 +35,15 @@ public class ScenarioTest {
 
     var totalPrice = basket.totalPrice();
     Assertions.assertEquals(new Money(new BigDecimal("30.00"), Currency.SGD), totalPrice);
+  }
+
+  @Test
+  void UseCase6ShouldValidateAmountOfBasket() {
+    Basket basket = new Basket();
+
+    MenuItem tomatoSoup = new MenuItem("Tomato Soup", new Money(new BigDecimal("100001.00"), Currency.SGD));
+    Assertions.assertThrows(BasketAmountExceedException.class, () -> basket.add(new BasketItem(tomatoSoup, 1)));
+
   }
 
 }

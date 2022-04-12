@@ -23,6 +23,13 @@ public class Money {
         return new Money(this.amount.add(money.amount), currency);
     }
 
+    public boolean moreThan(Money money) {
+        if (money.currency != this.currency) {
+            throw new UnsupportedOperationException();
+        }
+        return amount.compareTo(money.amount) == 1;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other)

@@ -60,4 +60,17 @@ public class ScenarioTest {
     Assertions.assertEquals(savedBasket.basketItems(), List.of(tomatoBasketItem));
   }
 
+  @Test
+  void UseCaseShouldBeAbleToSuggestCoupon() throws BasketAmountExceedException {
+    Basket basket = new Basket();
+    MenuItem tomatoSoup = new MenuItem("tomato_soup", "Tomato Soup", new Money(new BigDecimal("10.00"), Currency.SGD));
+    BasketItem tomatoBasketItem = new BasketItem(tomatoSoup, 3);
+    basket.add(tomatoBasketItem);
+
+    CouponSuggestionService service = new CouponSuggestionService();
+    Coupon tomatoCoupon = new Coupon("TOMATO_001", 10.0);
+    Coupon suggestedCoupon = service.SuggestCoupon(basket, List.of(tomatoCoupon));
+    Assertions.assertEquals("TOMATO_001", suggestedCoupon.getCode());
+  }
+
 }

@@ -2,14 +2,16 @@ package domain;
 
 public class CheckoutService {
   private final PaymentService paymentService;
+  private final EventPublisher eventPublisher;
 
-  public CheckoutService(PaymentService paymentService) {
+  public CheckoutService(PaymentService paymentService, EventPublisher eventPublisher) {
     this.paymentService = paymentService;
+    this.eventPublisher = eventPublisher;
   }
 
-  public OrderRequest checkout(Basket basket) {
+  public void checkout(Basket basket) {
     paymentService.pay(basket.totalPrice());
     basket.markAsPaid();
-    return new OrderRequest();
+    eventPublisher.publish("BasketCheckout", null);
   }
 }

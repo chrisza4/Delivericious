@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ScenarioTest {
@@ -18,6 +19,19 @@ public class ScenarioTest {
 
     public Money getPaidPrice() {
       return paidPrice;
+    }
+  }
+
+  class MockEventPublisher extends EventPublisher {
+    private List<String> publishedEvent = new ArrayList<>();
+
+    @Override
+    public void publish(String eventName, Object event) {
+      this.publishedEvent.add(eventName);
+    }
+
+    public List<String> getPublishedEvent() {
+      return this.publishedEvent;
     }
   }
 
@@ -93,11 +107,16 @@ public class ScenarioTest {
     basket.add(tomatoBasketItem);
 
     MockPaymentService mockPaymentService = new MockPaymentService();
-    CheckoutService checkoutService = new CheckoutService(mockPaymentService);
+    MockEventPublisher mockEventPublisher = new MockEventPublisher();
+    CheckoutService checkoutService = new CheckoutService(mockPaymentService, mockEventPublisher);
     checkoutService.checkout(basket);
 
     Assertions.assertEquals(basket.totalPrice(), mockPaymentService.paidPrice);
     Assertions.assertTrue(basket.isPaid());
+
+    Assertions.assertEquals(1, mockEventPublisher.getPublishedEvent().size());
+    Assertions.assertEquals("BasketCheckout", mockEventPublisher.getPublishedEvent().get(0));
+
   }
 
 }

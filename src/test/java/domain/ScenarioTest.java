@@ -8,6 +8,19 @@ import java.util.List;
 
 public class ScenarioTest {
 
+  class MockPaymentService extends PaymentService {
+    private Money paidPrice;
+
+    @Override
+    public void pay(Money price) {
+      this.paidPrice = price;
+    }
+
+    public Money getPaidPrice() {
+      return paidPrice;
+    }
+  }
+
   @Test
   void OurUseCases() throws BasketAmountExceedException {
     MenuItem tomatoSoup = new MenuItem("Tomato Soup", new Money(new BigDecimal("10.00"), Currency.SGD));
@@ -29,7 +42,6 @@ public class ScenarioTest {
     basket.remove(chocolateBasketItem.getId(), 1);
 
     Assertions.assertEquals(2, basket.getBasketItemById(chocolateBasketItem.getId()).get().getQuantity());
-    basket.add(new BasketItem(tomatoSoup, 1));
 
     // 2 Icecream, 1 Tomato soup, 1 Seafood salad
     // 8$ + 10$ + 12$ = 30$
@@ -71,6 +83,21 @@ public class ScenarioTest {
     Coupon tomatoCoupon = new Coupon("TOMATO_001", 10.0);
     Coupon suggestedCoupon = service.SuggestCoupon(basket, List.of(tomatoCoupon));
     Assertions.assertEquals("TOMATO_001", suggestedCoupon.getCode());
+  }
+
+  @Test
+  void UseCaseCheckout() throws BasketAmountExceedException {
+    Basket basket = new Basket();
+    MenuItem tomatoSoup = new MenuItem("tomato_soup", "Tomato Soup", new Money(new BigDecimal("10.00"), Currency.SGD));
+    BasketItem tomatoBasketItem = new BasketItem(tomatoSoup, 3);
+    basket.add(tomatoBasketItem);
+
+    MockPaymentService mockPaymentService = new MockPaymentService();
+    CheckoutService checkoutService = new CheckoutService(mockPaymentService);
+    checkoutService.checkout(basket);
+
+    Assertions.assertEquals(basket.totalPrice(), mockPaymentService.paidPrice);
+    Assertions.assertTrue(basket.isPaid());
   }
 
 }

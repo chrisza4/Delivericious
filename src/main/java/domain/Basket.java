@@ -10,6 +10,7 @@ public class Basket {
     private List<BasketItem> basketItems = new ArrayList<>();
     private static final Money AMOUNT_LIMIT = new Money(new BigDecimal(10000), Currency.SGD);
     private UUID id;
+    private BasketStatus status;
 
     public Basket() {
         this(UUID.randomUUID());
@@ -28,6 +29,14 @@ public class Basket {
 
     public UUID getId() {
         return id;
+    }
+
+    public void markAsPaid() {
+        this.status = BasketStatus.Paid;
+    }
+
+    public Boolean isPaid() {
+        return this.status == BasketStatus.Paid;
     }
 
     public void remove(UUID basketItemId, int quantity) {

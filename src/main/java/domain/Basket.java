@@ -9,12 +9,25 @@ import java.util.UUID;
 public class Basket {
     private List<BasketItem> basketItems = new ArrayList<>();
     private static final Money AMOUNT_LIMIT = new Money(new BigDecimal(10000), Currency.SGD);
+    private UUID id;
+
+    public Basket() {
+        this(UUID.randomUUID());
+    }
+
+    public Basket(UUID id) {
+        this.id = id;
+    }
 
     public void add(BasketItem basketItem) throws BasketAmountExceedException {
         if (totalPrice().add(basketItem.price()).moreThan(AMOUNT_LIMIT)) {
             throw new BasketAmountExceedException();
         }
         basketItems.add(basketItem);
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public void remove(UUID basketItemId, int quantity) {

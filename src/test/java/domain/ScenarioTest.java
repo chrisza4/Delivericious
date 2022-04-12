@@ -29,6 +29,7 @@ public class ScenarioTest {
     basket.remove(chocolateBasketItem.getId(), 1);
 
     Assertions.assertEquals(2, basket.getBasketItemById(chocolateBasketItem.getId()).get().getQuantity());
+    basket.add(new BasketItem(tomatoSoup, 1));
 
     // 2 Icecream, 1 Tomato soup, 1 Seafood salad
     // 8$ + 10$ + 12$ = 30$
@@ -44,6 +45,19 @@ public class ScenarioTest {
     MenuItem tomatoSoup = new MenuItem("Tomato Soup", new Money(new BigDecimal("100001.00"), Currency.SGD));
     Assertions.assertThrows(BasketAmountExceedException.class, () -> basket.add(new BasketItem(tomatoSoup, 1)));
 
+  }
+
+  @Test
+  void UseCaseShouldBeAbleToSave() throws BasketAmountExceedException {
+    BasketRepository repo = new BasketRepository();
+    Basket basket = new Basket();
+    MenuItem tomatoSoup = new MenuItem("Tomato Soup", new Money(new BigDecimal("10.00"), Currency.SGD));
+    BasketItem tomatoBasketItem = new BasketItem(tomatoSoup, 1);
+    basket.add(tomatoBasketItem);
+    repo.Save(basket);
+
+    Basket savedBasket = repo.getById(basket.getId());
+    Assertions.assertEquals(savedBasket.basketItems(), List.of(tomatoBasketItem));
   }
 
 }
